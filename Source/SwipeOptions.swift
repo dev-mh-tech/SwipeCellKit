@@ -7,6 +7,8 @@
 
 import UIKit
 
+public let SwipeFixedButtonWidth: CGFloat = 80
+
 /// :nodoc:
 public typealias SwipeTableOptions = SwipeOptions
 

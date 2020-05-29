@@ -285,6 +285,7 @@ class SwipeActionsView: UIView {
 class SwipeActionButtonWrapperView: UIView {
     let contentRect: CGRect
     var actionBackgroundColor: UIColor?
+    var actionBackgroundGradientLayer: CAGradientLayer?
     
     init(frame: CGRect, action: SwipeAction, orientation: SwipeActionsOrientation, contentWidth: CGFloat) {
         switch orientation {
@@ -294,6 +295,7 @@ class SwipeActionButtonWrapperView: UIView {
             contentRect = CGRect(x: 0, y: 0, width: contentWidth, height: frame.height)
         }
         
+        self.contentWidth = contentWidth
         super.init(frame: frame)
         
         configureBackgroundColor(with: action)
@@ -308,13 +310,24 @@ class SwipeActionButtonWrapperView: UIView {
         }
     }
     
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+
+        /// Up-to-date gradient layer (if it exist) frame with
+        /// parent layer bounds.
+        actionBackgroundGradientLayer?.frame = CGRect.init(x: 0, y: 0, width: SwipeFixedButtonWidth, height: layer.frame.height)
+    }
+    
     func configureBackgroundColor(with action: SwipeAction) {
         guard action.hasBackgroundColor else {
             isOpaque = false
             return
         }
         
-        if let backgroundColor = action.backgroundColor {
+        if let backgroundGradient = action.backgroundGradient {
+            layer.addSublayer(backgroundGradient)
+            actionBackgroundGradientLayer = backgroundGradient
+        } else if let backgroundColor = action.backgroundColor {
             actionBackgroundColor = backgroundColor
         } else {
             switch action.style {
@@ -345,4 +358,6 @@ class SwipeActionButtonWrapperView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    private let contentWidth: CGFloat
 }
