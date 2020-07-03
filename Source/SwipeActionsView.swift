@@ -315,7 +315,9 @@ class SwipeActionButtonWrapperView: UIView {
 
         /// Up-to-date gradient layer (if it exist) frame with
         /// parent layer bounds.
-        actionBackgroundGradientLayer?.frame = CGRect.init(x: 0, y: 0, width: SwipeFixedButtonWidth, height: layer.frame.height)
+        actionBackgroundGradientLayer?.frame = CGRect.init(x: 0, y: 0,
+                                                           width: contentWidth,
+                                                           height: layer.frame.height)
     }
     
     func configureBackgroundColor(with action: SwipeAction) {
